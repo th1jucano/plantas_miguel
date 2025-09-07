@@ -11,23 +11,23 @@ RTC_DS3231 rtc;
 void setup() {
   pinMode(rele, OUTPUT);
   pinMode(sensorUmidade, INPUT);
-  pinMode(sensorChuva, INPUT_PULLUP);
+  pinMode(sensorChuva, INPUT_PULLUP); // precisa do pullup para não dar variação
   digitalWrite(rele, HIGH); // Relé começa desligado
   Serial.begin(9600);
-  rtc.begin();
+  rtc.begin(); // inicia relógio
 }
 
 void loop() {
 
   DateTime agora = rtc.now();
-  int horaAtual = agora.hour();
+  int horaAtual = agora.hour(); // data e hora atuais
   Serial.println(horaAtual);
   bool semChuva = digitalRead(sensorChuva);     // 1 = seco, 0 = chovendo
   int secura = analogRead(sensorUmidade);       // >600 = seco
 
-  if ((horaAtual > 7) || (horaAtual < 17)){
+  if ((horaAtual > 7) || (horaAtual < 17)){ // somente acina durante o dia
 
-    Serial.print("Sensor de chuva: ");
+    Serial.print("Sensor de chuva: "); 
     Serial.println(semChuva);
     Serial.print("Umidade do solo: ");
     Serial.println(secura);
@@ -45,10 +45,10 @@ void loop() {
     else {
       // Solo úmido → não irrigar
       digitalWrite(rele, HIGH);
-      Serial.println("Solo úmido — sem irrigacaoo.");
+      Serial.println("Solo úmido — sem irrigacao.");
     }
 
-    Serial.print("Relé esto em: ");
+    Serial.print("Relé esta em: ");
     Serial.println(digitalRead(rele));
     delay(1000);
   }
